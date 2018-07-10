@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableMap;
 import com.moandjiezana.toml.Toml;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -30,6 +31,9 @@ public class GopkgDotLockModel {
     public static List<Map<String, Object>> parse(PackagePathResolver packagePathResolver, File file) {
         Toml toml = new Toml().read(file);
         List<Map<String, Object>> projects = toml.getList("projects");
+        if (projects == null) {
+            projects = Collections.emptyList();
+        }
         convertProperties(projects);
         convertPropertyNames(projects);
         processSource(packagePathResolver, projects);
@@ -40,7 +44,7 @@ public class GopkgDotLockModel {
         projects.forEach(project -> {
             String source = (String) project.remove("source");
             if (source != null) {
-                if (startWithVcsScheme(source)) {
+                if (startWithVcsScheme(source) || isGitUrl(source)) {
                     project.put("url", source);
                 } else {
                     VcsGolangPackage pkg = (VcsGolangPackage) packagePathResolver.produce(source).get();
@@ -49,6 +53,10 @@ public class GopkgDotLockModel {
                 }
             }
         });
+    }
+
+    private static boolean isGitUrl(String source) {
+        return source.startsWith("git@");
     }
 
     private static boolean startWithVcsScheme(String source) {

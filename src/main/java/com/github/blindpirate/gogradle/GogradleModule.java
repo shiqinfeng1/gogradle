@@ -23,8 +23,6 @@ import com.github.blindpirate.gogradle.core.BuildConstraintManager;
 import com.github.blindpirate.gogradle.core.DefaultBuildConstraintManager;
 import com.github.blindpirate.gogradle.core.cache.DefaultGlobalCacheManager;
 import com.github.blindpirate.gogradle.core.cache.GlobalCacheManager;
-import com.github.blindpirate.gogradle.core.dependency.DefaultDependencyRegistry;
-import com.github.blindpirate.gogradle.core.dependency.DependencyRegistry;
 import com.github.blindpirate.gogradle.core.dependency.lock.DefaultLockedDependencyManager;
 import com.github.blindpirate.gogradle.core.dependency.lock.LockedDependencyManager;
 import com.github.blindpirate.gogradle.core.dependency.parse.DefaultMapNotationParser;
@@ -123,8 +121,6 @@ public class GogradleModule extends AbstractModule {
         bind(GoBinaryManager.class).to(DefaultGoBinaryManager.class);
         bind(MapNotationParser.class).to(DefaultMapNotationParser.class);
         bind(GlobalCacheManager.class).to(DefaultGlobalCacheManager.class);
-        bind(DependencyRegistry.class).to(DefaultDependencyRegistry.class);
-//        bind(PackagePathResolver.class).to(DefaultPackagePathResolver.class);
         bind(NotationConverter.class).to(DefaultNotationConverter.class);
         bind(BuildConstraintManager.class).to(DefaultBuildConstraintManager.class);
         bind(DependencyVisitor.class).to(DefaultDependencyVisitor.class);
@@ -187,7 +183,7 @@ public class GogradleModule extends AbstractModule {
 
     }
 
-    /**
+    /*
      * PackagePathResolver which supports package substitution.
      * See https://github.com/gogradle/gogradle/blob/master/docs/repository-management.md
      */
@@ -218,7 +214,7 @@ public class GogradleModule extends AbstractModule {
         );
     }
 
-    /**
+    /*
      * PackagePathResolver which doesn't support package substitution.
      * E.g. only produces "original" packages (specified by https://golang.org/cmd/go/#hdr-Remote_import_paths).
      */
